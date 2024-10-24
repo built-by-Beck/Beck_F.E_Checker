@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ section }} - Fire Extinguisher Tracker</title>
+</head>
+<body>
+    <h1>Section: {{ section }}</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Location Number</th>
+                <th>Type</th>
+                <th>Size</th>
+                <th>Location</th>
+                <th>Barcode</th>
+                <th>Serial Number</th>
+                <th>Pass/Fail</th>
+                <th>Coordinates</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for extinguisher in extinguishers %}
+            <tr>
+                <td>{{ extinguisher.location_number }}</td>
+                <td>{{ extinguisher.type }}</td>
+                <td>{{ extinguisher.size }}</td>
+                <td>{{ extinguisher.location }}</td>
+                <td>{{ extinguisher.barcode }}</td>
+                <td>{{ extinguisher.serial_number }}</td>
+                <td>{{ extinguisher.pass_fail }}</td>
+                <td>{{ extinguisher.location_coordinates }}</td>
+                <td>
+                    <!-- Form to mark pass/fail -->
+                    <form action="/mark_pass_fail/{{ extinguisher.id }}" method="POST">
+                        <input type="hidden" name="section" value="{{ section }}">
+                        <input type="text" name="initials" placeholder="Your initials" required>
+                        <button type="submit" name="status" value="Pass">Pass</button>
+                        <button type="submit" name="status" value="Fail">Fail</button>
+                    </form>
+                    
+                    <!-- Button to capture location -->
+                    <button onclick="captureLocation({{ extinguisher.id }})">Capture Location</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function captureLocation(id) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude

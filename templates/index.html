@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Extinguisher Tracker</title>
+</head>
+<body>
+    <h1>Fire Extinguisher Tracker</h1>
+
+    <!-- List of sections -->
+    <h2>Select a Section</h2>
+    <ul>
+        {% for section in sections %}
+        <li><a href="{{ url_for('section', section=section) }}">{{ section }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <!-- Option to search for an extinguisher by barcode -->
+    <h2>Scan or Search by Barcode</h2>
+    <form action="/scan" method="POST">
+        <input type="text" name="barcode" placeholder="Enter Barcode">
+        <button type="submit">Search</button>
+    </form>
+</body>
+</html>

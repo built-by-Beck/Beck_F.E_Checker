@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Extinguisher Details</title>
+</head>
+<body>
+    <h1>Fire Extinguisher Details</h1>
+
+    <table>
+        <tr>
+            <td><strong>Location Number:</strong></td>
+            <td>{{ extinguisher.location_number }}</td>
+        </tr>
+        <tr>
+            <td><strong>Type:</strong></td>
+            <td>{{ extinguisher.type }}</td>
+        </tr>
+        <tr>
+            <td><strong>Size:</strong></td>
+            <td>{{ extinguisher.size }}</td>
+        </tr>
+        <tr>
+            <td><strong>Location:</strong></td>
+            <td>{{ extinguisher.location }}</td>
+        </tr>
+        <tr>
+            <td><strong>Barcode:</strong></td>
+            <td>{{ extinguisher.barcode }}</td>
+        </tr>
+        <tr>
+            <td><strong>Serial Number:</strong></td>
+            <td>{{ extinguisher.serial_number }}</td>
+        </tr>
+        <tr>
+            <td><strong>Pass/Fail:</strong></td>
+            <td>{{ extinguisher.pass_fail }}</td>
+        </tr>
+        <tr>
+            <td><strong>Coordinates:</strong></td>
+            <td>{{ extinguisher.location_coordinates }}</td>
+        </tr>
+    </table>
+
+    <!-- Form to mark pass/fail -->
+    <h2>Mark as Pass or Fail</h2>
+    <form action="/mark_pass_fail/{{ extinguisher.id }}" method="POST">
+        <input type="hidden" name="section" value="{{ extinguisher.section }}">
+        <input type="text" name="initials" placeholder="Your initials" required>
+        <button type="submit" name="status" value="Pass">Pass</button>
+        <button type="submit" name="status" value="Fail">Fail</button>
+    </form>
+    
+    <!-- Button to capture location -->
+    <button onclick="captureLocation({{ extinguisher.id }})">Capture Location</button>
+
+    <script>
+        function captureLocation(id) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    fetch(`/capture_location/${id}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ latitude, longitude })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Location captured: ' + data.coordinates);
+                        }
+                    });
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+    </script>
+</body>
+</html>

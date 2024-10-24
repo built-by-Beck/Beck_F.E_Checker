@@ -1,0 +1,4 @@
+Flask==2.3.2
+flask-sqlalchemy==3.0.4  # Optional if you want to use SQLAlchemy for database handling
+flask-wtf==1.1.1         # Optional for working with forms
+pandas==2.0.3            # If you're using pandas to work with CSV files
